@@ -12,7 +12,8 @@ struct Tarea {
 void cargarTareas(Tarea **Tareas, int cantidadTareas);
 void listarTareas(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas);
 void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas);
-Tarea * BuscarTarea (Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas, char *palabraclave);
+Tarea * BusquedaPorPalabra (Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas, char *palabraclave);
+Tarea* BusquedaPorID(Tarea **Tareas, int cantidadTareas,Tarea **TareasRealizadas,int idTarea);
 
 int main() {
     int cantidadTareas;
@@ -29,11 +30,19 @@ int main() {
     listarTareas(Tareas,cantidadTareas,TareasRealizadas);
     // listarTareasPorEstado(Tareas,cantidadTareas,TareasRealizadas);
     char *palabraclave = "hola";
-    Tarea * TareaSolicitada;
-    TareaSolicitada = (Tarea*)malloc(sizeof(Tarea));
-    TareaSolicitada = BuscarTarea (Tareas, cantidadTareas,TareasRealizadas, palabraclave);
+    Tarea * TareaSolicitadaPorPalabra;
+    TareaSolicitadaPorPalabra = (Tarea*)malloc(sizeof(Tarea));
+    TareaSolicitadaPorPalabra = BusquedaPorPalabra (Tareas, cantidadTareas,TareasRealizadas, palabraclave);
     printf("\nTAREA SOLICITADA\n");
-    puts(TareaSolicitada->Descripcion);   
+    puts(TareaSolicitadaPorPalabra->Descripcion);   
+    
+    Tarea *TareaSolicitadaPorID;
+    TareaSolicitadaPorID = (Tarea * )malloc(sizeof(Tarea));
+    TareaSolicitadaPorID = BuscarTarea(Tareas,cantidadTareas,TareasRealizadas,1);
+     printf("------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorID->TareaID);
+        printf("Descripción:\n ");
+        puts(TareaSolicitadaPorID->Descripcion);
+        printf("\nDuración: ", TareaSolicitadaPorID->Duracion);   
 }
 
 void cargarTareas(Tarea **Tareas, int cantidadTareas) {
@@ -109,18 +118,15 @@ void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRea
     }
     
 }
-Tarea * BuscarTarea (Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas, char *palabraclave){
+
+Tarea * BusquedaPorPalabra (Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas, char *palabraclave){
    
     for (int i = 0; i < cantidadTareas; i++)
     {
         if (TareasRealizadas[i]!=NULL)
         {
             if (strstr(TareasRealizadas[i]->Descripcion,palabraclave) != NULL)
-            {
-                return TareasRealizadas[i];
-            }
-            
-        } else {
+ } else {
             if (Tareas[i] != NULL)
             {
                 if (strstr(Tareas[i]->Descripcion,palabraclave) != NULL)
@@ -134,6 +140,31 @@ Tarea * BuscarTarea (Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizada
         TareasRealizadas++;
         return NULL;
     }
+}
+Tarea* BusquedaPorID(Tarea **Tareas, int cantidadTareas,Tarea **TareasRealizadas,int idTarea){
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (TareasRealizadas[i] != NULL )
+        {
+            if (TareasRealizadas[i]->TareaID == idTarea )
+            {
+                return TareasRealizadas[i];
+            }
+        }else {
+            if (Tareas[i] != NULL )
+            {
+                if ( Tareas[i]->TareaID == idTarea )
+                {
+                        return Tareas[i];
+                }
+                
+            } 
+    }
+    TareasRealizadas++;
+    Tareas++;
+}
+return NULL;
+        
     
 }
 

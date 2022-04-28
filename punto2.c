@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct Tarea {
     int TareaID; //numerado en ciclo iterativo
@@ -11,6 +12,7 @@ struct Tarea {
 void cargarTareas(Tarea **Tareas, int cantidadTareas);
 void listarTareas(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas);
 void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas);
+Tarea * BuscarTarea (Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas, char *palabraclave);
 
 int main() {
     int cantidadTareas;
@@ -25,10 +27,13 @@ int main() {
 
     cargarTareas(Tareas,cantidadTareas);
     listarTareas(Tareas,cantidadTareas,TareasRealizadas);
-    listarTareasPorEstado(Tareas,cantidadTareas,TareasRealizadas);
-    
-
-    
+    // listarTareasPorEstado(Tareas,cantidadTareas,TareasRealizadas);
+    char *palabraclave = "hola";
+    Tarea * TareaSolicitada;
+    TareaSolicitada = (Tarea*)malloc(sizeof(Tarea));
+    TareaSolicitada = BuscarTarea (Tareas, cantidadTareas,TareasRealizadas, palabraclave);
+    printf("\nTAREA SOLICITADA\n");
+    puts(TareaSolicitada->Descripcion);   
 }
 
 void cargarTareas(Tarea **Tareas, int cantidadTareas) {
@@ -104,3 +109,31 @@ void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRea
     }
     
 }
+Tarea * BuscarTarea (Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas, char *palabraclave){
+   
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (TareasRealizadas[i]!=NULL)
+        {
+            if (strstr(TareasRealizadas[i]->Descripcion,palabraclave) != NULL)
+            {
+                return TareasRealizadas[i];
+            }
+            
+        } else {
+            if (Tareas[i] != NULL)
+            {
+                if (strstr(Tareas[i]->Descripcion,palabraclave) != NULL)
+            {
+                return Tareas[i];
+            }
+            }
+            
+        }
+        Tareas++;
+        TareasRealizadas++;
+        return NULL;
+    }
+    
+}
+

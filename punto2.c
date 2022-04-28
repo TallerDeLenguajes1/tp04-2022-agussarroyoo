@@ -11,7 +11,7 @@ struct Tarea {
 void cargarTareas(Tarea **Tareas, int cantidadTareas);
 void listarTareas(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas);
 void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas);
-
+Tarea* BuscarTarea(Tarea **Tareas, int cantidadTareas,Tarea **TareasRealizadas,int idTarea);
 int main() {
     int cantidadTareas;
 
@@ -25,7 +25,15 @@ int main() {
 
     cargarTareas(Tareas,cantidadTareas);
     listarTareas(Tareas,cantidadTareas,TareasRealizadas);
-    listarTareasPorEstado(Tareas,cantidadTareas,TareasRealizadas);
+    // listarTareasPorEstado(Tareas,cantidadTareas,TareasRealizadas);
+    Tarea *TareaSolicitada;
+    TareaSolicitada = (Tarea * )malloc(sizeof(Tarea));
+    TareaSolicitada = BuscarTarea(Tareas,cantidadTareas,TareasRealizadas,1);
+     printf("------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitada->TareaID);
+        printf("Descripción:\n ");
+        puts(TareaSolicitada->Descripcion);
+        printf("\nDuración: ", TareaSolicitada->Duracion );
+
     
 
     
@@ -104,3 +112,21 @@ void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRea
     }
     
 }
+Tarea* BuscarTarea(Tarea **Tareas, int cantidadTareas,Tarea **TareasRealizadas,int idTarea){
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (TareasRealizadas[i] != NULL && TareasRealizadas[i]->TareaID == idTarea )
+        {
+            return TareasRealizadas[i];
+        }else {
+            if (Tareas[i] != NULL && Tareas[i]->TareaID == idTarea )
+            {
+                return Tareas[i];
+            } else {
+                return NULL;
+            }
+        }
+    }
+    
+}
+

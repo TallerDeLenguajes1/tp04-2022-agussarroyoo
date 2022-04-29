@@ -28,21 +28,24 @@ int main() {
 
     cargarTareas(Tareas,cantidadTareas);
     listarTareas(Tareas,cantidadTareas,TareasRealizadas);
-    // listarTareasPorEstado(Tareas,cantidadTareas,TareasRealizadas);
+    listarTareasPorEstado(Tareas,cantidadTareas,TareasRealizadas);
+
     char *palabraclave = "hola";
     Tarea * TareaSolicitadaPorPalabra;
     TareaSolicitadaPorPalabra = (Tarea*)malloc(sizeof(Tarea));
-    TareaSolicitadaPorPalabra = BusquedaPorPalabra (Tareas, cantidadTareas,TareasRealizadas, palabraclave);
-    printf("\nTAREA SOLICITADA\n");
-    puts(TareaSolicitadaPorPalabra->Descripcion);   
+    TareaSolicitadaPorPalabra = BusquedaPorPalabra(Tareas, cantidadTareas,TareasRealizadas, palabraclave);
+     printf("------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorPalabra->TareaID);
+        printf("Descripción:\n ");
+        puts(TareaSolicitadaPorPalabra->Descripcion);
+        printf("\nDuración: %d\n", TareaSolicitadaPorPalabra->Duracion);    
     
     Tarea *TareaSolicitadaPorID;
     TareaSolicitadaPorID = (Tarea * )malloc(sizeof(Tarea));
-    TareaSolicitadaPorID = BuscarTarea(Tareas,cantidadTareas,TareasRealizadas,1);
+    TareaSolicitadaPorID = BusquedaPorID(Tareas,cantidadTareas,TareasRealizadas,1);
      printf("------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorID->TareaID);
         printf("Descripción:\n ");
         puts(TareaSolicitadaPorID->Descripcion);
-        printf("\nDuración: ", TareaSolicitadaPorID->Duracion);   
+        printf("\nDuración: %d\n", TareaSolicitadaPorID->Duracion);   
 }
 
 void cargarTareas(Tarea **Tareas, int cantidadTareas) {
@@ -58,8 +61,6 @@ void cargarTareas(Tarea **Tareas, int cantidadTareas) {
         Tareas[i]->Descripcion = (char *)malloc(sizeof(char)*500);
         gets(Tareas[i]->Descripcion);
         Tareas[i]->Duracion = rand()%101+10;
-        
-        Tareas++;
     }
     
 }
@@ -71,21 +72,15 @@ void listarTareas(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas) 
         printf("------------TAREA [%d]-------------\n",Tareas[i]->TareaID);
         printf("Descripción:\n ");
         puts(Tareas[i]->Descripcion);
-        printf("\nDuración: ", Tareas[i]->Duracion );
+        printf("\nDuración: %d", Tareas[i]->Duracion );
         printf("\nIngrese 1 si la tarea ya fue realizada. De lo contrario presione cualquier numero: ");
         scanf("%d",&realizada);
-        TareasRealizadas[i] = (Tarea *)malloc(sizeof(Tarea)) ;
+        TareasRealizadas[i] = NULL ;
         if (realizada == 1)
         {
-            TareasRealizadas[i]->TareaID = Tareas[i]->TareaID;
-            TareasRealizadas[i]->Duracion = Tareas[i]->Duracion;
-            TareasRealizadas[i]->Descripcion = Tareas[i]->Descripcion;
+            TareasRealizadas[i]= Tareas[i];
             Tareas[i] = NULL;
-        } else {
-            TareasRealizadas[i] = NULL;
         }
-        Tareas++;
-        TareasRealizadas++;
     }
     
 }
@@ -101,7 +96,6 @@ void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRea
             puts(Tareas[i]->Descripcion);
             printf("\nDuración: ", Tareas[i]->Duracion );
         }
-        Tareas++;
     }
     printf("\n---------------TAREAS REALIZADAS---------------\n");
     for (int j= 0; j< cantidadTareas; j++)
@@ -114,7 +108,6 @@ void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRea
             puts(TareasRealizadas[j]->Descripcion);
             printf("\nDuración: ", TareasRealizadas[j]->Duracion );
         }
-        TareasRealizadas++;
     }
     
 }
@@ -125,46 +118,46 @@ Tarea * BusquedaPorPalabra (Tarea **Tareas, int cantidadTareas, Tarea **TareasRe
     {
         if (TareasRealizadas[i]!=NULL)
         {
-            if (strstr(TareasRealizadas[i]->Descripcion,palabraclave) != NULL)
- } else {
-            if (Tareas[i] != NULL)
+            if (strstr(TareasRealizadas[i]->Descripcion,palabraclave) != NULL) 
             {
-                if (strstr(Tareas[i]->Descripcion,palabraclave) != NULL)
-            {
-                return Tareas[i];
-            }
-            }
+                return TareasRealizadas[i];
+            }    
+        }else {
+                if (Tareas[i] != NULL)
+                {
+                    if (strstr(Tareas[i]->Descripcion,palabraclave) != NULL)
+                    {
+                        return Tareas[i];
+                    }
+                 }
             
-        }
-        Tareas++;
-        TareasRealizadas++;
-        return NULL;
+            }
+      
     }
-}
+    printf("NULL");
+    return NULL;
+}  
 Tarea* BusquedaPorID(Tarea **Tareas, int cantidadTareas,Tarea **TareasRealizadas,int idTarea){
     for (int i = 0; i < cantidadTareas; i++)
     {
-        if (TareasRealizadas[i] != NULL )
+        if (TareasRealizadas[i]!=NULL)
         {
-            if (TareasRealizadas[i]->TareaID == idTarea )
+            if (TareasRealizadas[i]->TareaID == idTarea) 
             {
                 return TareasRealizadas[i];
-            }
-        }else {
-            if (Tareas[i] != NULL )
-            {
-                if ( Tareas[i]->TareaID == idTarea )
-                {
-                        return Tareas[i];
-                }
-                
             } 
+        }else {
+                if (Tareas[i] != NULL)
+                {
+                    if (Tareas[i]->TareaID == idTarea) 
+                    {
+                        return Tareas[i];
+                    }
+                 }
+            
+            }
     }
-    TareasRealizadas++;
-    Tareas++;
-}
-return NULL;
-        
-    
+    printf("NULL");
+     return NULL;
 }
 

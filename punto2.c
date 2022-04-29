@@ -14,6 +14,7 @@ void listarTareas(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas);
 void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas);
 Tarea * BusquedaPorPalabra (Tarea **Tareas, int cantidadTareas, Tarea **TareasRealizadas, char *palabraclave);
 Tarea* BusquedaPorID(Tarea **Tareas, int cantidadTareas,Tarea **TareasRealizadas,int idTarea);
+void liberarMemoria (Tarea **Tareas,int cantidadTareas);
 
 int main() {
     int cantidadTareas;
@@ -34,7 +35,7 @@ int main() {
     Tarea * TareaSolicitadaPorPalabra;
     TareaSolicitadaPorPalabra = (Tarea*)malloc(sizeof(Tarea));
     TareaSolicitadaPorPalabra = BusquedaPorPalabra(Tareas, cantidadTareas,TareasRealizadas, palabraclave);
-     printf("------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorPalabra->TareaID);
+     printf("\n------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorPalabra->TareaID);
         printf("Descripción:\n ");
         puts(TareaSolicitadaPorPalabra->Descripcion);
         printf("\nDuración: %d\n", TareaSolicitadaPorPalabra->Duracion);    
@@ -42,10 +43,13 @@ int main() {
     Tarea *TareaSolicitadaPorID;
     TareaSolicitadaPorID = (Tarea * )malloc(sizeof(Tarea));
     TareaSolicitadaPorID = BusquedaPorID(Tareas,cantidadTareas,TareasRealizadas,1);
-     printf("------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorID->TareaID);
+     printf("\n------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorID->TareaID);
         printf("Descripción:\n ");
         puts(TareaSolicitadaPorID->Descripcion);
         printf("\nDuración: %d\n", TareaSolicitadaPorID->Duracion);   
+    liberarMemoria(Tareas,cantidadTareas);
+    liberarMemoria(TareasRealizadas,cantidadTareas);
+
 }
 
 void cargarTareas(Tarea **Tareas, int cantidadTareas) {
@@ -106,7 +110,7 @@ void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRea
             printf("TAREA [%d]\n",TareasRealizadas[j]->TareaID);
             printf("Descripción:\n ");
             puts(TareasRealizadas[j]->Descripcion);
-            printf("\nDuración: ", TareasRealizadas[j]->Duracion );
+            printf("\nDuración: %d", TareasRealizadas[j]->Duracion );
         }
     }
     
@@ -161,3 +165,12 @@ Tarea* BusquedaPorID(Tarea **Tareas, int cantidadTareas,Tarea **TareasRealizadas
      return NULL;
 }
 
+void liberarMemoria (Tarea **Tareas,int cantidadTareas) {
+
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (Tareas[i] != NULL) free(Tareas[i]->Descripcion);
+        free(Tareas[i]);
+    }
+    free(Tareas);
+}

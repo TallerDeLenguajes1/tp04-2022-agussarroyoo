@@ -35,7 +35,7 @@ int main() {
     Tarea * TareaSolicitadaPorPalabra;
     TareaSolicitadaPorPalabra = (Tarea*)malloc(sizeof(Tarea));
     TareaSolicitadaPorPalabra = BusquedaPorPalabra(Tareas, cantidadTareas,TareasRealizadas, palabraclave);
-     printf("\n------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorPalabra->TareaID);
+     printf("------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorPalabra->TareaID);
         printf("Descripción:\n ");
         puts(TareaSolicitadaPorPalabra->Descripcion);
         printf("\nDuración: %d\n", TareaSolicitadaPorPalabra->Duracion);    
@@ -43,7 +43,7 @@ int main() {
     Tarea *TareaSolicitadaPorID;
     TareaSolicitadaPorID = (Tarea * )malloc(sizeof(Tarea));
     TareaSolicitadaPorID = BusquedaPorID(Tareas,cantidadTareas,TareasRealizadas,1);
-     printf("\n------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorID->TareaID);
+     printf("------------TAREA SOLICITADA [%d]-------------\n",TareaSolicitadaPorID->TareaID);
         printf("Descripción:\n ");
         puts(TareaSolicitadaPorID->Descripcion);
         printf("\nDuración: %d\n", TareaSolicitadaPorID->Duracion);   
@@ -54,6 +54,7 @@ int main() {
 
 void cargarTareas(Tarea **Tareas, int cantidadTareas) {
     srand((unsigned)time(NULL));
+    char *Buffer = (char *)malloc(sizeof(char) * 500);
 
     for (int i = 0; i < cantidadTareas; i++)
     {
@@ -61,9 +62,12 @@ void cargarTareas(Tarea **Tareas, int cantidadTareas) {
         printf("------------CARGAR TAREA [%d]-------------\n",i);
         fflush(stdin);
         Tareas[i]->TareaID = i;
+
         printf("Ingrese la descripcion de la tarea: ");
-        Tareas[i]->Descripcion = (char *)malloc(sizeof(char)*500);
-        gets(Tareas[i]->Descripcion);
+        gets(Buffer);
+        Tareas[i]->Descripcion = (char *)malloc(strlen(Buffer) +1);
+        strcpy(Tareas[i]->Descripcion,Buffer);
+
         Tareas[i]->Duracion = rand()%101+10;
     }
     
@@ -98,7 +102,7 @@ void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRea
             printf("TAREA [%d]\n",Tareas[i]->TareaID);
             printf("Descripción:\n ");
             puts(Tareas[i]->Descripcion);
-            printf("\nDuración: ", Tareas[i]->Duracion );
+            printf("\nDuración: %d", Tareas[i]->Duracion );
         }
     }
     printf("\n---------------TAREAS REALIZADAS---------------\n");
@@ -110,7 +114,7 @@ void listarTareasPorEstado(Tarea **Tareas, int cantidadTareas, Tarea **TareasRea
             printf("TAREA [%d]\n",TareasRealizadas[j]->TareaID);
             printf("Descripción:\n ");
             puts(TareasRealizadas[j]->Descripcion);
-            printf("\nDuración: %d", TareasRealizadas[j]->Duracion );
+            printf("\nDuración: ", TareasRealizadas[j]->Duracion );
         }
     }
     

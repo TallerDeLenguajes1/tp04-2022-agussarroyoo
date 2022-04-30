@@ -23,26 +23,27 @@ void listarTareas(nodo **Tareas, int cantidadTareas, nodo **TareasRealizadas);
 void listarTareasPorEstado(nodo *Tareas,int cantidadTareas);
 nodo *BusquedaPorPalabra(nodo **Tareas, char *palabraclave);
 nodo *BusquedaPorID(nodo **Tareas, int idTarea);
+void LiberarLista(nodo *Tareas);  
 
 int main() {
-    //si devuelvo un puntero simple, no mando nada como paramentro y trabajo sin * en la funcion
-    //si devuelvo un void, mando un puntero doble y al puntero doble lo trabajo con * dentro de la fcion
 
     nodo *Tareas; //cabecera lista de tareas
     crearListaVacia(&Tareas);
     nodo *TareasRealizadas;
     crearListaVacia(&TareasRealizadas);
- 
+ /////////////////////////////////////////////////////////
     int cantidadTareas;
     printf("Ingrese la cantidad de tareas a cargar: ");
     scanf("%d",&cantidadTareas);
 
-    
+/////////////////////////////////////////////////////////
     for (int i = 0; i < cantidadTareas; i++)
     {
         cargaListaTareas(&Tareas,i);
     }
+/////////////////////////////////////////////////////////
     listarTareas(&Tareas, cantidadTareas, &TareasRealizadas);
+/////////////////////////////////////////////////////////
 
     printf("\nTAREAS PENDIENTES\n");
     nodo *Aux = Tareas;
@@ -59,6 +60,8 @@ int main() {
         Aux = Aux->siguiente;
     }
 
+/////////////////////////////////////////////////////////
+
     char *palabraclave = "hola";
     if(BusquedaPorPalabra(&Tareas, palabraclave)){
         printf("\n\nTAREA SOLICITADA");
@@ -71,7 +74,8 @@ int main() {
         } else {
             printf("\nNo se encontro la tarea solicitada\n");
         }      
-    }   
+    } 
+
     if(BusquedaPorID(&Tareas, 1)){
         printf("\n\nTAREA SOLICITADA");
         listarTarea(BusquedaPorID(&Tareas, 1));
@@ -84,6 +88,10 @@ int main() {
             printf("\nNo se encontro la tarea solicitada\n");
         }      
     }   
+
+    /////////////////////////////////////////////////////////
+    LiberarLista(Tareas);
+    LiberarLista(TareasRealizadas);
 }
 
 nodo *crearListaVacia(nodo **listaTareas) {
@@ -177,11 +185,22 @@ nodo *BusquedaPorID(nodo **Tareas, int idTarea) {
     nodo *TareasAux = *Tareas;
     while (*Tareas != NULL)
     {
-            if (TareasAux->T.TareaID) 
+            if (TareasAux->T.TareaID == idTarea) 
             {
                 return TareasAux;
             } 
             TareasAux = TareasAux->siguiente;
     }
     return NULL;
+}
+void LiberarLista(nodo *Tareas)
+{
+   nodo *Aux;
+   while( Tareas!=NULL)
+    {
+        Aux=Tareas;
+        Tareas=Tareas->siguiente;
+        free(Aux->T.Descripcion);
+        free(Aux);   
+    }  
 }
